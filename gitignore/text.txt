@@ -1,0 +1,3 @@
+Database world_skills
+User world_skills
+password password
