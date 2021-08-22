@@ -25,7 +25,12 @@
 		if(($_POST['username'] == $username) && ($_POST['password'] == $password)){
 			//Username and Password Match
 			if($is_admin){
-				app_redirect($env_base_url,'templates/pages/dashboard-maintenance-manager');
+				if ($_POST['dashboard'] == 'emergency-maintenance') {
+					app_redirect($env_base_url,'templates/pages/dashboard-maintenance-manager');
+				}
+				if ($_POST['dashboard'] == 'inventory-management') {
+					app_redirect($env_base_url,'templates/pages/dashboard-inventory-management');
+				}
 			}
 			else {
 				app_redirect($env_base_url,'templates/pages/dashboard-accountable-party');
