@@ -19,6 +19,7 @@
 		'asset_maintenance' => $env_base_url.'/api/asset_maintenance.php',
 		'parts' => $env_base_url.'/api/parts.php',
 		'asset_history' => $env_base_url.'/api/asset_history.php',
+		's2_inventory_transactions' => $env_base_url.'/api/s2_inventory_transactions.php',
 	];
 	$env_functions = [
 		'login' => $env_base_url.'/functions/login.php'
