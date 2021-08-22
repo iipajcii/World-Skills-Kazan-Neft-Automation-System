@@ -3,8 +3,11 @@
 	$env_database = [
 		"user" => "world_skills",
 		"password" => "password",
-		"database" => "Section1",
 		"host" => "localhost"
+	];
+	$env_databases = [
+		'Section1' => 'Section1',
+		'Section2' => 'Section2'
 	];
 	$env_pages = [
 		'login' => $env_base_url.'/templates/pages/login.php',
