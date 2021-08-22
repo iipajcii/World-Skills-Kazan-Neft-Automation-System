@@ -2,7 +2,7 @@
 	session_start();
 	header('Content-Type: application/json');
 	require "../.env.php";
-	$mysql = new mysqli($env_database['host'], $env_database['user'], $env_database['password'], $env_database['database']);
+	$mysql = new mysqli($env_database['host'], $env_database['user'], $env_database['password'], $env_databases['Section1']);
 	if ($mysql->connect_error) die($mysql->connect_error);
 
 	isset($_POST['AssetID']) ? $asset_id = $_POST['AssetID'] : $asset_id = $_GET['asset_id'];

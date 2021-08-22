@@ -1,7 +1,7 @@
 <?php
 	session_start();
 	require "../.env.php";
-	$mysql = new mysqli($env_database['host'], $env_database['user'], $env_database['password'], $env_database['database']);
+	$mysql = new mysqli($env_database['host'], $env_database['user'], $env_database['password'], $env_databases['Section1']);
 	if ($mysql->connect_error) die($mysql->connect_error);
 
 	$query = "SELECT * FROM (emergencymaintenances) WHERE EMEndDate is NULL";
