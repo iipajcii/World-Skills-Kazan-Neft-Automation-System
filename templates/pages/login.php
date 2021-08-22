@@ -14,7 +14,7 @@
 	<?php
 		include "../pieces/header.php";
 	?>
-	<form method="post" action="<?php echo $env_pages['dashboard'];?>">
+	<form method="post" action="<?php echo $env_functions['login'];?>">
 	<?php
 		include "../pieces/login_form.php";
 	?>
