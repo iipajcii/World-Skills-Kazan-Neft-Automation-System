@@ -25,6 +25,18 @@
 				</div>
 			</div>
 
+			<div class="field">
+				<label class="label">Dashboard</label>
+				<div class="control has-icons-left has-icons-right">
+					<div class="select is-fullwidth">
+						<select name="dashboard">
+							<option value="emergency-maintenance" selected>Emergency Maintenance</option>
+							<option value="inventory-management">Inventory Management</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
 			<div class="field is-grouped m-2 has-text-right columns">
 				<div class="column">
 					
