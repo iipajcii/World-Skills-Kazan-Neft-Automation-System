@@ -1,5 +1,4 @@
 <?php
-	# ID | AssetID | PriorityID | DescriptionEmergency | OtherConsiderations | EMReportDate | EMStartDate | EMEndDate  | EMTechnicianNote
 	require "../.env.php";
 	header('Content-Type: application/json');
 	$post_id = $_POST['AssetID']; 
