@@ -20,6 +20,10 @@
 		'parts' => $env_base_url.'/api/parts.php',
 		'asset_history' => $env_base_url.'/api/asset_history.php',
 		's2_inventory_transactions' => $env_base_url.'/api/s2_inventory_transactions.php',
+		's2_suppliers' => $env_base_url.'/api/s2_suppliers.php',
+		's2_warehouses' => $env_base_url.'/api/s2_warehouses.php',
+		's2_parts' => $env_base_url.'/api/s2_parts.php',
+		's2_inventory_report' => $env_base_url.'/api/s2_inventory_report.php',
 	];
 	$env_functions = [
 		'login' => $env_base_url.'/functions/login.php'
