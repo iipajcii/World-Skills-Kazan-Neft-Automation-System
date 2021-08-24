@@ -18,6 +18,8 @@
             parts: "<?php echo $env_api['parts']; ?>",
             asset_history: "<?php echo $env_api['asset_history']; ?>",
             asset_maintenance: "<?php echo $env_api['asset_maintenance']; ?>",
+            s1_manage_emergency_maintenance: "<?php echo $env_api['s1_manage_emergency_maintenance']; ?>",
+            s2_remove_order_item: "<?php $env_base_url.'/api/s2_remove_order_item.php' ?>",
         }
     </script>
 </head>
@@ -25,7 +27,6 @@
 	<?php
 		include '../pieces/header.php';
 	?>
-	<p>Maintenance</p>
 	<div id="maintenance-table" class="m-2 p-2">
     	<h1 class="is-size-5 has-text-weight-bold p-3">List of Assets Requesting EM</h1>
     	<div class="table-container">
@@ -51,6 +52,9 @@
                     </tr>
                 </tfoot>
                 <tbody>
+                    <tr v-if="sorted_maintenance_requests.length == 0">
+                        <td class="has-text-centered" colspan="6" style="vertical-align: middle;">No Maintenance Requests are Present</td>
+                    </tr>
                     <tr v-for="(request, index) in sorted_maintenance_requests" @click="selectRow(index)" :class="{ 'is-selected': $data.index == index }">
                         <td class="has-text-centered" style="vertical-align: middle;">{{request.AssetSN}}</td>
                         <td class="has-text-left" style="vertical-align: middle;">{{request.AssetName}}</td>
@@ -81,14 +85,14 @@
                 </header>
                 <div class="card-content">
                     <div>
-                        <label class="label is-size-4">Assert EM Report</label>
+                        <label class="label has-text-centered is-medium">Assert EM Report</label>
                         <div>
                             <div class="columns">
                                 <div class="column">
                                     <div class="field">
                                         <label class="label">Start Date</label>
                                         <div class="control">
-                                            <input class="input" type="date" name="">
+                                            <input ref="em_start_date" class="input" type="date" name="">
                                         </div>
                                     </div>
                                 </div>
@@ -96,13 +100,13 @@
                                     <div class="field">
                                         <label class="label">Completed On</label>
                                         <div class="control">
-                                            <input class="input" type="date" name="">
+                                            <input ref="em_end_date" class="input" type="date" name="">
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="field">
-                                <label class="label">Technician Note</label>
+                                <label class="label mt-3">Technician Note</label>
                                 <div class="control">
                                     <textarea ref="em_technician_note" name="em_technician_note" class="textarea"></textarea>
                                 </div>
@@ -110,20 +114,20 @@
                         </div>
                     </div>
                     <div>
-                        <label class="label is-size-4">Replacement Parts</label>
+                        <label class="label mt-6 mb-3">Replacement Parts</label>
                         <div>
                             <div class="columns">
                                 <div class="column">
                                     <div class="field is-horizontal">
                                         <div class="field-label is-normal">
-                                            <label class="label">Part Name</label>
+                                            <label class="label is-size-7">Part Name</label>
                                         </div>
                                         <div class="field-body">
                                             <div class="field">
                                                 <p class="control">
-                                                    <div class="select">
+                                                    <div class="select is-small">
                                                         <select ref="part_name" name="part_name">
-                                                            <option v-for="(part, index) in parts" :value="part.Name" selected>{{part.Name}}</option>
+                                                            <option v-for="(part, index) in parts" :value="part.Name" :data-id="part.id" selected>{{part.Name}}</option>
                                                             <option value="" selected>-- -- --</option>
                                                         </select>
                                                     </div>
@@ -135,18 +139,18 @@
                                 <div class="column">
                                     <div class="field is-horizontal">
                                         <div class="field-label is-normal">
-                                            <label class="label">Amount</label>
+                                            <label class="label is-size-7">Amount</label>
                                         </div>
                                         <div class="field-body">
                                             <div class="field">
                                                 <p class="control">
-                                                    <input ref="part_amount" min="0" class="input" type="number" name="amount"/>
+                                                    <input ref="part_amount" min="0" class="input is-small" type="number" name="amount"/>
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="column is-narrow"><button @click="addToPartBasket" class="button is-primary"><span class="has-size-4">+</span>&nbsp;Add To List </button></div>
+                                <div class="column is-narrow"><button @click="addToPartBasket" class="button is-small is-primary"><span class="has-size-4">+</span>&nbsp;Add To List </button></div>
                             </div>
                         </div>
                         <div class="columns">
@@ -169,7 +173,7 @@
                                         </tfoot>
                                         <tbody>
                                             <tr v-if="part_basket.length == 0">
-                                                <td class="has-text-centered" style="vertical-align: middle;">No Parts Have Been Added</td>
+                                                <td class="has-text-centered" colspan="3" style="vertical-align: middle;">No Parts Have Been Added</td>
                                             </tr>
                                             <tr v-for="(part, index) in part_basket">
                                                 <td class="has-text-left" style="vertical-align: middle;">{{part.name}}</td>
@@ -183,7 +187,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="label is-size-4">Asset History</label>
+                        <label class="label mt-6 mb-3">Asset History</label>
                         <div class="columns">
                             <div class="column is-full">
                                 <div class="table-container">
@@ -204,7 +208,7 @@
                                         </tfoot>
                                         <tbody>
                                             <tr v-if="computed_asset_history.length == 0">
-                                                <td class="has-text-centered" style="vertical-align: middle;">No Valid Part History Found for this Asset</td>
+                                                <td class="has-text-centered" colspan="3" style="vertical-align: middle;">No Valid Part History Found for this Asset</td>
                                             </tr>
                                             <tr v-for="(part, index) in computed_asset_history">
                                                 <td class="has-text-left" style="vertical-align: middle;">{{part.Name}}</td>
@@ -218,11 +222,11 @@
                         </div>
                     </div>
                     <div class="has-text-centered">
-                        <button @click="" class="button is-info">Submit</button>
-                        <button class="button is-danger">Cancel</button>
+                        <button @click="updateEmergencyMaintenanceRequest" class="button is-medium is-info m-5 pl-6 pr-6">Submit</button>
+                        <button @click="this.activateMaintenanceModalToggle" class="button is-medium is-danger m-5 pl-6 pr-6">Cancel</button>
                     </div>
                 </div>
-                <footer class="card-footer">Footer Here</footer>
+                <footer class="card-footer"></footer>
             </div>
         </b-modal>
     </div>
@@ -283,21 +287,33 @@
                     axios
                         .get(window.app_links.parts)
                         .then(function(res){
-                            _this.parts = res.data;
+                            _this.parts = (res.data)
+                                .sort(function(a,b){
+                                    return a.Name.toLocaleLowerCase() > b.Name.toLocaleLowerCase();
+                                })
+                            ;
                         })
                         .catch(function(res){
                             console.error(res.data);
                         })
                 },
                 addToPartBasket(){
-                    let _this = this;                    
-                    if(parseInt(this.$refs.part_amount.value) < 1){
-                        alert("Amount cannot be less than 1");
+                    let _this = this;
+                    let isInHistory = false;                    
+                    if(parseFloat(this.$refs.part_amount.value) < 1){
+                        this.$buefy.dialog.alert({
+                            title: 'Notice',
+                            message: '"Amount cannot be less than 1"',
+                            type: 'is-info',
+                            ariaRole: 'alertdialog',
+                            ariaModal: true
+                        });
                         return;
                     }
                     //Checking if part to add is already in asset history
                     for(counter = 0, count = this.computed_asset_history.length; counter < count; counter++){
                         if((this.computed_asset_history[counter].Name == this.$refs.part_name.value) && this.computed_asset_history[counter].daysLeft > 0){
+                            isInHistory = true;
                             this.$buefy.dialog.confirm({
                                 title: 'Replace Usable Part?',
                                 message: `Are you sure you want replace the:<br/> \"<b>${this.$refs.part_name.value}</b>\"<br/> part in this asset? <br/><br/>The remaining days left will be lost.`,
@@ -309,20 +325,22 @@
                             })
                         }
                     }
+                    if(!isInHistory){this.addToPartBasketFunction();}
                     
                 },
                 addToPartBasketFunction(){
                     for(counter = 0, count = this.part_basket.length; counter < count; counter++){
                         if(this.part_basket[counter].name == this.$refs.part_name.value){
-                            this.part_basket[counter].amount = parseInt(this.part_basket[counter].amount) + parseInt(this.$refs.part_amount.value);
+                            this.part_basket[counter].amount = parseFloat(this.part_basket[counter].amount) + parseFloat(this.$refs.part_amount.value);
                             this.$refs.part_name.value = "";
                             this.$refs.part_amount.value = "";
                             return;                            
                         }
                     }
                     this.part_basket.push({
+                        id:this.$refs.part_name.options[this.$refs.part_name.options.selectedIndex].dataset.id,
                         name: this.$refs.part_name.value,
-                        amount: parseInt(this.$refs.part_amount.value)
+                        amount: parseFloat(this.$refs.part_amount.value)
                     });
                     this.$refs.part_name.value = "";
                     this.$refs.part_amount.value = "";
@@ -359,6 +377,50 @@
                         return false;
                     }
                     this.isMaintenanceRequestModalActive = true;
+                },
+                updateEmergencyMaintenanceRequest(){
+                    let _this = this;
+                    let params = new URLSearchParams();
+                    params.append('id', this.selectedRequest.id);
+                    params.append('start_date', this.$refs.em_start_date.value);
+                    params.append('end_date', this.$refs.em_end_date.value);
+                    params.append('technician', this.$refs.em_technician_note.value);
+                    params.append('parts', JSON.stringify(this.part_basket));
+                    axios
+                        .post(window.app_links.s1_manage_emergency_maintenance, params)
+                        .then(function(res){
+                            console.log(res.data);
+                            if(res.data.value == true){
+                                _this.$buefy.dialog.alert({
+                                    title: 'Success',
+                                    message: 'Emergency Maintenance submitted successfully',
+                                    type: 'is-success',
+                                    ariaRole: 'alertdialog',
+                                    ariaModal: true
+                                });
+                                _this.getMaintenanceRequests();
+                                _this.activateMaintenanceModalToggle();
+                            }
+                            else {
+                                _this.$buefy.dialog.alert({
+                                    title: 'Warning',
+                                    message: 'Emergency Maintenance could not be created, unfulfilled maintenance in the system',
+                                    type: 'is-warning',
+                                    ariaRole: 'alertdialog',
+                                    ariaModal: true
+                                });
+                            }
+                        })
+                        .catch(function(error){
+                            console.error(error);
+                            _this.$buefy.dialog.alert({
+                                title: 'Error',
+                                message: 'There was an error with performing this action.',
+                                type: 'is-danger',
+                                ariaRole: 'alertdialog',
+                                ariaModal: true
+                            });
+                        })
                 }
     		}
     	});
