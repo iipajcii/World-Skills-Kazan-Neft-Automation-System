@@ -1,5 +1,5 @@
 <?php
-	include "../../.env.php";
+	require_once "../../.env.php";
 ?>
 <!DOCTYPE html>
 <html>
