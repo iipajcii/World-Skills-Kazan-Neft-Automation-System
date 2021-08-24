@@ -100,11 +100,11 @@
                         </div>
                     </div>
                     <div class="has-text-centered">
-                        <button @click="createEM" class="button is-info">Send Request</button>
-                        <button class="button is-danger">Cancel</button>
+                        <button @click="createEM" class="button is-medium is-info m-5 pl-6 pr-6">Send Request</button>
+                        <button @click="emergencyMaintenanceModalToggle" class="button is-medium is-danger m-5 pl-6 pr-6">Cancel</button>
                     </div>
                 </div>
-                <footer class="card-footer">Footer Here</footer>
+                <footer class="card-footer"></footer>
             </div>
         </b-modal>
     </div>
@@ -157,6 +157,9 @@
                         return false;
                     }
                     this.isEmergencyMaintenanceModalActive = true;
+                },
+                toggleMaintenanceModalActive(){
+                    this.isEmergencyMaintenanceModalActive = !this.isEmergencyMaintenanceModalActive;
                 },
                 createEM(){
                     let _this = this;
