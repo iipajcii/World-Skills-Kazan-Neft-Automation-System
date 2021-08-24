@@ -19,11 +19,15 @@
 		'asset_maintenance' => $env_base_url.'/api/asset_maintenance.php',
 		'parts' => $env_base_url.'/api/parts.php',
 		'asset_history' => $env_base_url.'/api/asset_history.php',
+		's1_manage_emergency_maintenance' => $env_base_url.'/api/s1_manage_emergency_maintenance.php',
 		's2_inventory_transactions' => $env_base_url.'/api/s2_inventory_transactions.php',
 		's2_suppliers' => $env_base_url.'/api/s2_suppliers.php',
 		's2_warehouses' => $env_base_url.'/api/s2_warehouses.php',
 		's2_parts' => $env_base_url.'/api/s2_parts.php',
 		's2_inventory_report' => $env_base_url.'/api/s2_inventory_report.php',
+		's2_warehouse_management' => $env_base_url.'/api/s2_warehouse_management.php',
+		's2_purchase_order' => $env_base_url.'/api/s2_purchase_order.php',
+		's2_remove_order_item' => $env_base_url.'/api/s2_remove_order_item.php',
 	];
 	$env_functions = [
 		'login' => $env_base_url.'/functions/login.php'
